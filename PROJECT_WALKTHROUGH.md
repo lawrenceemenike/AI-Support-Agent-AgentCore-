@@ -13,6 +13,8 @@ This project implements a fully functional, enterprise-grade AI customer support
 
 ## 2. AgentCore Cloud Deployment (`agentcore deploy` CLI Output)
 
+![AgentCore Deploy Terminal Output](screenshots/agentcore_deploy.png)
+
 ```text
 $ uv run agentcore deploy
 

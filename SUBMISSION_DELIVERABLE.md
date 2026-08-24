@@ -6,6 +6,8 @@
 
 ## 1. AgentCore Cloud Deployment (`agentcore deploy` CLI Output)
 
+![AgentCore Deploy Terminal Output](screenshots/agentcore_deploy.png)
+
 Below is the complete, direct CLI terminal output demonstrating the successful build and deployment of the containerized agent to **Amazon Bedrock AgentCore Runtime** via AWS CodeBuild:
 
 ```text

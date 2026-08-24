@@ -117,6 +117,8 @@ uv run agentcore configure --entrypoint main.py --name customer_support_agent --
 uv run agentcore deploy
 ```
 
+![AgentCore Deploy Terminal Output](screenshots/agentcore_deploy.png)
+
 #### Actual Deployment Output (`agentcore deploy`):
 ```text
 🚀 Launching Bedrock AgentCore (codebuild mode - RECOMMENDED)...
