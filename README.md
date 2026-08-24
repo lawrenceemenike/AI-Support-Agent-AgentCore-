@@ -56,20 +56,6 @@ flowchart TD
     end
     
     MemHook <-->|Store & Retrieve Facts/Preferences| Memory[(AgentCore Memory LTM)]
-## ☁️ Deployed AWS Infrastructure
-
-| Resource | Identifier / ARN | Purpose |
-| :--- | :--- | :--- |
-| **AgentCore Runtime** | `customer_support_agent-mg3iJ3AQ0b` | Containerized Python 3.14 runtime on ARM64 |
-| **AgentCore Memory** | `CustomerSupportMemory-7gBufM9tWh` | LTM strategies: `customer_facts` & `customer_preferences` |
-| **AgentCore Gateway** | `customersupportgateway-ficlwnwjtk` | MCP endpoint with HTTP SSE streaming transport |
-| **API Gateway Target** | `2vc937rsf6` (`CustomerSupportOrderAPI`) | REST API proxying order tracking and customer queries |
-| **Lambda Targets** | `order-tracker` & `refund-processor` | Mock database and refund processing backend |
-| **Knowledge Base S3** | `cs-support-kb-093325579981` | Product catalog and policy document repository |
-| **Container ECR** | `bedrock-agentcore-customer_support_agent` | Deployed container image on Amazon ECR |
-
----
-```text
 
 ## 📂 Repository Structure
 
