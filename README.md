@@ -70,10 +70,11 @@ flowchart TD
 | **Container ECR** | `bedrock-agentcore-customer_support_agent` | Deployed container image on Amazon ECR |
 
 ---
+```text
 
 ## 📂 Repository Structure
 
-```text
+
 .
 ├── starter/
 │   ├── main.py                     # Main agent implementation (All 8 TODOs)
