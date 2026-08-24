@@ -516,9 +516,15 @@ async def invoke(payload, context=None):
         return f"An error occurred while processing your request: {str(e)}"
 
 
-# ── CLI entry point (do not modify) ──────────────────────────────────────────
+# ── CLI entry point (Local Testing & Cloud Runtime) ───────────────────────────
 def main():
-    """Run one invocation from the command line for local testing."""
+    """
+    Run one invocation from the command line for local CLI testing.
+    Usage for local testing:
+        uv run python -c 'import asyncio, json, main; print(asyncio.run(main.invoke({"prompt": "Can you track order ORD-001?", "customer_id": "CUST-123"})))'
+        OR uncomment `main()` below and run:
+        uv run python main.py '{"prompt": "Can you track order ORD-001?", "customer_id": "CUST-123"}'
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("payload", type=str)
     args = parser.parse_args()
@@ -527,6 +533,9 @@ def main():
 
 
 if __name__ == "__main__":
+    # Production Cloud Runtime Entry Point:
+    # `app.run()` starts the Bedrock AgentCore HTTP runtime server listening on container port 8080.
     app.run()
-    # Uncomment the line below and comment app.run() for local CLI testing:
+    
+    # For local CLI debugging without starting the web server, uncomment the line below:
     # main()

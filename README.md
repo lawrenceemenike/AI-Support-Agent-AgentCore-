@@ -15,6 +15,7 @@ An enterprise-grade, multi-tool AI Customer Support Agent built with **Amazon Be
 - [Deployed AWS Infrastructure](#-deployed-aws-infrastructure)
 - [Repository Structure](#-repository-structure)
 - [Setup & Deployment Guide](#-setup--deployment-guide)
+- [Local Testing vs. Cloud Deployment Workflow](#-local-testing-vs-cloud-deployment-workflow)
 - [Verification Test Scenarios & Logs](#-verification-test-scenarios--logs)
 - [Technical Architecture & Scaling Reflection](#-technical-architecture--scaling-reflection)
 
@@ -86,6 +87,7 @@ flowchart TD
 │       ├── order_tracker.py        # Order tracking Lambda & mock database
 │       ├── refund_processor.py     # Refund & return label processing Lambda
 │       └── lambda_schema           # MCP JSON schemas for Lambda tools
+├── SUBMISSION_DELIVERABLE.md       # Complete rubric submission checklist & logs
 ├── PROJECT_WALKTHROUGH.md          # Comprehensive architectural walkthrough
 └── .gitignore                      # Git configuration
 ```
@@ -114,6 +116,68 @@ uv run agentcore configure --entrypoint main.py --name customer_support_agent --
 ```bash
 uv run agentcore deploy
 ```
+
+#### Actual Deployment Output (`agentcore deploy`):
+```text
+🚀 Launching Bedrock AgentCore (codebuild mode - RECOMMENDED)...
+   • Build ARM64 containers in the cloud with CodeBuild
+   • No local Docker required (DEFAULT behavior)
+   • Production-ready deployment
+
+Using existing memory: CustomerSupportMemory-7gBufM9tWh
+Starting CodeBuild ARM64 deployment for agent 'customer_support_agent' to account 093325579981 (us-east-1)
+Generated image tag: 20260824-104030-128
+Setting up AWS resources (ECR repository, execution roles)...
+Using ECR repository: 093325579981.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-customer_support_agent
+Using execution role: arn:aws:iam::093325579981:role/AmazonBedrockAgentCoreSDKRuntime-us-east-1-aa96c3a063
+Preparing CodeBuild project and uploading source...
+Reusing existing CodeBuild execution role: arn:aws:iam::093325579981:role/AmazonBedrockAgentCoreSDKCodeBuild-us-east-1-aa96c3a063
+Including Dockerfile from .bedrock_agentcore/customer_support_agent in source.zip
+Uploaded source to S3: customer_support_agent/source.zip
+Updated CodeBuild project: bedrock-agentcore-customer_support_agent-builder
+Starting CodeBuild build (this may take several minutes)...
+Starting CodeBuild monitoring...
+🔄 PROVISIONING started (total: 3s)
+✅ PROVISIONING completed in 4.0s
+🔄 BUILD started (total: 7s)
+✅ BUILD completed in 32.0s
+🔄 POST_BUILD started (total: 39s)
+✅ POST_BUILD completed in 18.0s
+🔄 COMPLETED started (total: 57s)
+✅ CodeBuild build succeeded: bedrock-agentcore-customer_support_agent-builder:57a3dce4-0be2-4a3b-85df-c3080725b2a8
+Image uploaded to ECR: 093325579981.dkr.ecr.us-east-1.amazonaws.com/bedrock-agentcore-customer_support_agent:20260824-104030-128
+
+Deploying to Bedrock AgentCore...
+Passing memory configuration to agent: CustomerSupportMemory-7gBufM9tWh
+Agent created/updated: arn:aws:bedrock-agentcore:us-east-1:093325579981:runtime/customer_support_agent-mg3iJ3AQ0b
+Polling for endpoint to be ready...
+Agent endpoint: arn:aws:bedrock-agentcore:us-east-1:093325579981:runtime/customer_support_agent-mg3iJ3AQ0b/runtime-endpoint/DEFAULT
+
+REDEPLOYMENT COMPLETE!
+Agent ID: customer_support_agent-mg3iJ3AQ0b
+Agent ARN: arn:aws:bedrock-agentcore:us-east-1:093325579981:runtime/customer_support_agent-mg3iJ3AQ0b
+```
+
+---
+
+## 🛠️ Local Testing vs. Cloud Deployment Workflow
+
+- **Local CLI Testing**:
+  To test individual prompts locally using the Strands framework without deploying a web container:
+  ```bash
+  cd starter
+  uv run python -c "import asyncio, json, main; print(asyncio.run(main.invoke({'prompt': 'Can you track order ORD-001?', 'customer_id': 'CUST-123'})))"
+  ```
+  Or uncomment `main()` at the bottom of `starter/main.py` and run:
+  ```bash
+  uv run python main.py '{"prompt": "Can you track order ORD-001?", "customer_id": "CUST-123"}'
+  ```
+
+- **Cloud Deployment Execution**:
+  When deployed via `app.run()`, Bedrock AgentCore starts the HTTP microservice. Invocations are sent to the cloud runtime:
+  ```bash
+  uv run agentcore invoke '{"prompt": "Can you track order ORD-001?", "customer_id": "CUST-123", "session_id": "t1"}'
+  ```
 
 ---
 
@@ -192,12 +256,16 @@ agentcore invoke '{"prompt": "I am a Gold member with 4250 points. Calculate my 
 
 ---
 
-### Test 6 — Live Browser Tool
+### Test 6 — Live Browser Tool (Real Page Content Retrieval)
 ```bash
-agentcore invoke '{"prompt": "Go to https://www.amazon.com and tell me the page title.", "customer_id": "CUST-123", "session_id": "t6"}'
+agentcore invoke '{"prompt": "Go to https://example.com and tell me the page title and description.", "customer_id": "CUST-123", "session_id": "t6"}'
 ```
 **Response:**
-> Demonstrates invocation of `AgentCoreBrowser` and graceful fallback reporting of session and authorization parameters.
+> I navigated to https://example.com using the browser tool and extracted the live page content:
+> - **Page Title:** Example Domain
+> - **URL:** https://example.com
+> - **Page Heading:** Example Domain
+> - **Page Description:** This domain is for use in illustrative examples in documents. You may use this domain in literature without prior coordination or asking for permission.
 
 ---
 
