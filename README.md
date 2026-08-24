@@ -1,5 +1,3 @@
-# AI-Support-Agent-AgentCore
-
 # 🛒 Production AI Customer Support Agent with Amazon Bedrock AgentCore & Strands SDK
 
 [![AWS Bedrock](https://img.shields.io/badge/AWS-Amazon%20Bedrock%20AgentCore-FF9900?logo=amazon-aws&logoColor=white)](https://aws.amazon.com/bedrock/)
@@ -56,7 +54,8 @@ flowchart TD
         Agent -->|Python Code Sandbox| Sandbox[AgentCore Code Interpreter]
         Agent -->|Web Navigation| Browser[AgentCore Browser Tool]
     end
-
+    
+    MemHook <-->|Store & Retrieve Facts/Preferences| Memory[(AgentCore Memory LTM)]
 ## ☁️ Deployed AWS Infrastructure
 
 | Resource | Identifier / ARN | Purpose |
@@ -216,7 +215,7 @@ This project is open-source under the MIT License.
 
 The key correction is that **each heading now literally contains `#`, `##`, or `###` in the source**, and the code sections use proper triple-backtick fences. The table header is also corrected to:
 
-```markdown
+
 | Resource | Identifier / ARN | Purpose |
     
     MemHook <-->|Store & Retrieve Facts/Preferences| Memory[(AgentCore Memory LTM)]
